@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">ProjetPays2</string>
+    <string name="welcome">Bienvenue</string>
+    <string name="countryOrCapital">Pays ou capital</string>
+    <string name="research">Rechercher</string>
+</resources>
