@@ -1,6 +1,8 @@
 package com.example.projetpays2
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -25,4 +27,16 @@ class CountryListActivity : AppCompatActivity() {
         listCountryRecView.layoutManager =
             LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.list_country, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when(item.itemId) {
+//            R.id.app_bar_search
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 }
