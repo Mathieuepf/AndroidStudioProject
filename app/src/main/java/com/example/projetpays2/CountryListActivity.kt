@@ -9,6 +9,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 class CountryListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,17 +30,28 @@ class CountryListActivity : AppCompatActivity() {
 
         listCountryRecView.layoutManager =
             LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
+
+
+        val countries = Country.generateClountry(10)
+        listCountryRecView.adapter = CountryAdapter(countries)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.list_country, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when(item.itemId) {
-//            R.id.app_bar_search
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
+    private fun displayCountries() {
+        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        val client = OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor)
+            .build()
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://restcountries.com/")
+            .addConverterFactory(MoshiConverterFactory.create())
+            .client(client)
+            .build()
+
+        val countryService = retrofit.create(CountryService::class.java)
+    }
 }

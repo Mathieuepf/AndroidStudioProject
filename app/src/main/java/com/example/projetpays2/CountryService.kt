@@ -9,4 +9,4 @@ interface CountryService {
 }
 
 data class CountriesResult(val results: List<Country>)
-data class Country(val name: String, val flag: Int)
+//data class Country(val name: String, val flag: String)
