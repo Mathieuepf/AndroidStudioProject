@@ -1,9 +1,9 @@
 package com.example.projetpays2
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toolbar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -18,18 +18,17 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 class CountryListActivity : AppCompatActivity() {
 
-    lateinit var listCountryRecView: RecyclerView
+    private lateinit var listCountryRecView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContentView(R.layout.activity_country_list)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        System.out.println("On est là")
 
         listCountryRecView =
             findViewById<RecyclerView>(R.id.list_countries_recyclerView)
@@ -38,8 +37,12 @@ class CountryListActivity : AppCompatActivity() {
             LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
 
 
-        val countries = Country.generateClountry(10)
+        val countries = Country.generateCountry(10)
         listCountryRecView.adapter = CountryAdapter(countries)
+
+        val userInput = intent.getStringExtra("userInput")
+
+        //displayCountries(userInput)
 
 //        val toolbar = findViewById<Toolbar>(R.id.toolbar)
 //        setSupportActionBar(toolbar)
@@ -54,13 +57,14 @@ class CountryListActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.button_research_menu -> {
-                displayCountries()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun displayCountries() {
+    private fun displayCountries(countryName: String?) {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }

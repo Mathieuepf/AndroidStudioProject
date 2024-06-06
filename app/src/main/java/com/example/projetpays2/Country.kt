@@ -9,7 +9,7 @@ data class Country(
     val flag: String
 ) : Parcelable{
     companion object {
-        fun generateClountry(size: Int=10) =
+        fun generateCountry(size: Int=10) =
             (1 .. size).map {
                 Country(
                     "Country${it}",
