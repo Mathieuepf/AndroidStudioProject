@@ -42,14 +42,12 @@ class CountryListActivity : AppCompatActivity() {
 
         val userInput = intent.getStringExtra("userInput")
 
-        //displayCountries(userInput)
-
-//        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-//        setSupportActionBar(toolbar)
+        // Uncomment this line to call displayCountries with userInput
+        // displayCountries(userInput)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        System.out.println("menu créé")
+        println("menu créé")
         menuInflater.inflate(R.menu.list_country, menu)
         return super.onCreateOptionsMenu(menu)
     }
@@ -65,31 +63,27 @@ class CountryListActivity : AppCompatActivity() {
     }
 
     private fun displayCountries(countryName: String?) {
-        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-
-        val client = OkHttpClient.Builder()
-            .addInterceptor(httpLoggingInterceptor)
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://restcountries.com/")
-            .addConverterFactory(MoshiConverterFactory.create())
-            .client(client)
-            .build()
-
-        val countryService = retrofit.create(CountryService::class.java)
-
-        runBlocking {
-            val countries = countryService.getCountries(10)
-            val countryList = countries.results.map {
-                Country(
-                    it.name, it.flag
-                )
-            }
-            val adapter = CountryAdapter(countryList)
-            listCountryRecView.adapter = adapter
-        }
+//        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
+//            level = HttpLoggingInterceptor.Level.BODY
+//        }
+//
+//        val client = OkHttpClient.Builder()
+//            .addInterceptor(httpLoggingInterceptor)
+//            .build()
+//
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl("https://restcountries.com/")
+//            .addConverterFactory(MoshiConverterFactory.create())
+//            .client(client)
+//            .build()
+//
+//        val countryService = retrofit.create(CountryService::class.java)
+//
+//        runBlocking {
+//            val countries = countryService.searchCountries(countryName)
+//            val adapter = CountryAdapter(countries)
+//            listCountryRecView.adapter = adapter
+//        }
+        TODO("do a research to find the country with the input of the user (=countryName")
     }
 }

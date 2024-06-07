@@ -1,12 +1,26 @@
 package com.example.projetpays2
 
+import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.Path
 
 interface CountryService {
-    @GET("api")
-    suspend fun getCountries(@Query("results") nb : Int = 20) : CountriesResult
+    @GET("name/{countryName}")
+    fun searchCountries(@Path("countryName") countryName: String?) : Call<List<CountriesResult>>
 }
 
-data class CountriesResult(val results: List<Country>)
+
+
+data class CountriesResult(
+    val name: Name
+) {
+    fun toModel() = Country(
+        name = name.common,
+        flag = "default"
+    )
+}
+
+data class Name(
+    val common: String
+)
 //data class Country(val name: String, val flag: String)
