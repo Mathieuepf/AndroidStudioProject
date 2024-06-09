@@ -4,16 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 class CountryListActivity : AppCompatActivity() {
 
@@ -21,7 +18,6 @@ class CountryListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         setContentView(R.layout.activity_country_list)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -29,15 +25,14 @@ class CountryListActivity : AppCompatActivity() {
             insets
         }
 
-        listCountryRecView =
-            findViewById<RecyclerView>(R.id.list_countries_recyclerView)
+        listCountryRecView = findViewById(R.id.list_countries_recyclerView)
+        listCountryRecView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        listCountryRecView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        val countries = Country.generateCountry(10)
+        listCountryRecView.adapter = CountryAdapter(countries)
 
-
-        val userInput = intent.getStringExtra("userInput")
-        displayCountries(userInput)
+        //val userInput = intent.getStringExtra("userInput")
+        //displayCountries(userInput)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -59,19 +54,8 @@ class CountryListActivity : AppCompatActivity() {
     private fun displayCountries(countryName: String?) {
         val countryRepository = CountryRepositoryImpl()
         runBlocking {
-            try {
-                val countries = withContext(Dispatchers.IO) {
-                    countryRepository.searchCountries(countryName ?: "")
-                }
-                listCountryRecView.adapter = CountryAdapter(countries)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Toast.makeText(
-                    this@CountryListActivity,
-                    "Failed to fetch countries",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            val countries = countryRepository.searchCountries(countryName ?: "")
+            listCountryRecView.adapter = CountryAdapter(countries)
         }
     }
 }
