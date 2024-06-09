@@ -31,8 +31,8 @@ class CountryListActivity : AppCompatActivity() {
         val countries = Country.generateCountry(10)
         listCountryRecView.adapter = CountryAdapter(countries)
 
-        //val userInput = intent.getStringExtra("userInput")
-        //displayCountries(userInput)
+        val userInput = intent.getStringExtra("userInput")
+        displayCountries(userInput)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

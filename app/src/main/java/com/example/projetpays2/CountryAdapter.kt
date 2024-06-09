@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
@@ -26,6 +27,7 @@ class CountryAdapter(private val countries: List<Country>) : RecyclerView.Adapte
         val view = holder.itemView
         val nameCountry = view.findViewById<TextView>(R.id.name_country_textView)
         val flag = view.findViewById<ImageView>(R.id.imageView_flag_country_view)
+        val addToFavoritesIcon = view.findViewById<ImageView>(R.id.add_to_favorites_icon_country_view)
 
         nameCountry.text = country.name
         Glide.with(view.context).load(country.flag).into(flag)
@@ -37,6 +39,11 @@ class CountryAdapter(private val countries: List<Country>) : RecyclerView.Adapte
                 putExtra("countryFlag", country.flag)
             }
             context.startActivity(intent)
+        }
+
+        addToFavoritesIcon.setOnClickListener {
+            addToFavoritesIcon.setImageResource(android.R.drawable.btn_star_big_on)
+            Toast.makeText(view.context, "${country.name} added to favorites", Toast.LENGTH_SHORT).show()
         }
     }
 }

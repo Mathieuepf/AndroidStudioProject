@@ -23,8 +23,8 @@ class CountryDetailsActivity : AppCompatActivity() {
         val countryName = intent.getStringExtra("countryName")
         val countryFlag = intent.getStringExtra("countryFlag")
 
-        val countryNameTextView = findViewById<TextView>(R.id.country_name)
-        val countryFlagImageView = findViewById<ImageView>(R.id.country_flag)
+        val countryNameTextView = findViewById<TextView>(R.id.country_name_details_country_activity)
+        val countryFlagImageView = findViewById<ImageView>(R.id.country_flag_country_details_activity)
 
         countryNameTextView.text = countryName
         Glide.with(this).load(countryFlag).into(countryFlagImageView)
