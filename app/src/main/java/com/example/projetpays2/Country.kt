@@ -19,21 +19,7 @@ data class Country(
             }
     }
 
-    fun getImage() = R.drawable.unknown_flag2
+    fun getImage(): String? {
+        return flag
+    }
 }
-
-//data class CountryDTO(
-//    @SerializedName("name")
-//    val name: Name,
-//    @SerializedName("region")
-//    val region: String,
-//    @SerializedName("area")
-//    val area: Double,
-//    @SerializedName("population")
-//    val population: Int
-//)
-//
-//data class Name(
-//    @SerializedName("common")
-//    val common: String
-//)

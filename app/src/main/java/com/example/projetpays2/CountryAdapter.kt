@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 class CountryViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
@@ -28,7 +29,12 @@ class CountryAdapter (val countries: List<Country>) : RecyclerView.Adapter<Count
         nameCountry.text = country.name
 
         val flag = view.findViewById<ImageView>(R.id.imageView_flag_country_view)
-        flag.setImageResource(country.getImage())
+        country.getImage()?.let { flagUrl ->
+            Glide.with(view.context)
+                .load(flagUrl)
+                .placeholder(R.drawable.unknown_flag2)
+                .into(flag)
+        }
     }
 
 }

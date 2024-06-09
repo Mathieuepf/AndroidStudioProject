@@ -42,8 +42,8 @@ class CountryRepositoryImpl: CountryRepository {
         return try {
             val response = countryService.searchCountries(query).awaitResponse()
             if (response.isSuccessful) {
-                val countries = response.body() ?: emptyList()
-                countries.map { it.toModel() }
+                val countriesDTO = response.body() ?: emptyList()
+                countriesDTO.map { it.toModel() }
             } else {
                 emptyList()
             }
@@ -52,4 +52,8 @@ class CountryRepositoryImpl: CountryRepository {
             emptyList()
         }
     }
+}
+
+fun CountryDTO.toModel(): Country {
+    return Country(name.common, flags.png)
 }

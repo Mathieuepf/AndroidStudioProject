@@ -4,17 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import kotlinx.coroutines.withContext
 
 class CountryListActivity : AppCompatActivity() {
 
@@ -34,16 +33,11 @@ class CountryListActivity : AppCompatActivity() {
             findViewById<RecyclerView>(R.id.list_countries_recyclerView)
 
         listCountryRecView.layoutManager =
-            LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-
-        val countries = Country.generateCountry(10)
-        listCountryRecView.adapter = CountryAdapter(countries)
 
         val userInput = intent.getStringExtra("userInput")
-
-        // Uncomment this line to call displayCountries with userInput
-        // displayCountries(userInput)
+        displayCountries(userInput)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -53,7 +47,7 @@ class CountryListActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.button_research_menu -> {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
@@ -63,27 +57,21 @@ class CountryListActivity : AppCompatActivity() {
     }
 
     private fun displayCountries(countryName: String?) {
-//        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-//            level = HttpLoggingInterceptor.Level.BODY
-//        }
-//
-//        val client = OkHttpClient.Builder()
-//            .addInterceptor(httpLoggingInterceptor)
-//            .build()
-//
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl("https://restcountries.com/")
-//            .addConverterFactory(MoshiConverterFactory.create())
-//            .client(client)
-//            .build()
-//
-//        val countryService = retrofit.create(CountryService::class.java)
-//
-//        runBlocking {
-//            val countries = countryService.searchCountries(countryName)
-//            val adapter = CountryAdapter(countries)
-//            listCountryRecView.adapter = adapter
-//        }
-        TODO("do a research to find the country with the input of the user (=countryName")
+        val countryRepository = CountryRepositoryImpl()
+        runBlocking {
+            try {
+                val countries = withContext(Dispatchers.IO) {
+                    countryRepository.searchCountries(countryName ?: "")
+                }
+                listCountryRecView.adapter = CountryAdapter(countries)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(
+                    this@CountryListActivity,
+                    "Failed to fetch countries",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 }
