@@ -10,11 +10,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import kotlinx.coroutines.runBlocking
 
 class CountryListActivity : AppCompatActivity() {
 
     private lateinit var listCountryRecView: RecyclerView
+    private lateinit var db: AppDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -25,11 +28,13 @@ class CountryListActivity : AppCompatActivity() {
             insets
         }
 
+        db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "countries-db").build()
+
         listCountryRecView = findViewById(R.id.list_countries_recyclerView)
         listCountryRecView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         val countries = Country.generateCountry(10)
-        listCountryRecView.adapter = CountryAdapter(countries)
+        listCountryRecView.adapter = CountryAdapter(countries, this, db)
 
         val userInput = intent.getStringExtra("userInput")
         displayCountries(userInput)
@@ -55,7 +60,7 @@ class CountryListActivity : AppCompatActivity() {
         val countryRepository = CountryRepositoryImpl()
         runBlocking {
             val countries = countryRepository.searchCountries(countryName ?: "")
-            listCountryRecView.adapter = CountryAdapter(countries)
+            listCountryRecView.adapter = CountryAdapter(countries, this@CountryListActivity, db)
         }
     }
 }

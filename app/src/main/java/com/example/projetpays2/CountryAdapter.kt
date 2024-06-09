@@ -1,5 +1,6 @@
 package com.example.projetpays2
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +10,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CountryViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-class CountryAdapter(private val countries: List<Country>) : RecyclerView.Adapter<CountryViewHolder>() {
+class CountryAdapter(private val countries: List<Country>, private val context: Context, private val db: AppDatabase) : RecyclerView.Adapter<CountryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -33,7 +37,6 @@ class CountryAdapter(private val countries: List<Country>) : RecyclerView.Adapte
         Glide.with(view.context).load(country.flag).into(flag)
 
         view.setOnClickListener {
-            val context = view.context
             val intent = Intent(context, CountryDetailsActivity::class.java).apply {
                 putExtra("countryName", country.name)
                 putExtra("countryFlag", country.flag)
@@ -44,6 +47,10 @@ class CountryAdapter(private val countries: List<Country>) : RecyclerView.Adapte
         addToFavoritesIcon.setOnClickListener {
             addToFavoritesIcon.setImageResource(android.R.drawable.btn_star_big_on)
             Toast.makeText(view.context, "${country.name} added to favorites", Toast.LENGTH_SHORT).show()
+
+            CoroutineScope(Dispatchers.IO).launch {
+                db.countryDao().insert(country.toEntity())
+            }
         }
     }
 }
