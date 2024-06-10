@@ -49,4 +49,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <fragment
+        android:id="@+id/country_details_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="359dp"
+        android:layout_height="346dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/country_population_details_country_activity"
+        tools:context=".MapsActivity" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

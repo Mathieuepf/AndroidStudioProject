@@ -9,10 +9,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMapOptions
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
 private const val TAG = "CountryDetailsActivity"
 
-class CountryDetailsActivity : AppCompatActivity() {
+class CountryDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
+
+    private lateinit var mMap: GoogleMap
+    private lateinit var pos: LatLng
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -41,5 +51,18 @@ class CountryDetailsActivity : AppCompatActivity() {
         Glide.with(this).load(countryFlag).into(countryFlagImageView)
         countryCapitalTextView.text = "Capital: $countryCapital"
         countryPopulationTextView.text = "Population: $countryPopulation"
+
+        val map = supportFragmentManager.findFragmentById(R.id.country_details_map) as SupportMapFragment
+        pos = LatLng(40.0, 2.0)
+        map.getMapAsync(this)
+    }
+
+    override fun onMapReady(p0: GoogleMap) {
+        mMap = p0
+
+        // Ajouter un marqueur à une position et déplacer la caméra
+        val sydney = LatLng(-34.0, 151.0)
+        mMap.addMarker(MarkerOptions().position(pos))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(pos))
     }
 }
