@@ -8,6 +8,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 interface CountryRepository {
     suspend fun searchCountries(query: String): List<Country>
+
+    suspend fun searchPosition(query: String): PositionDTO
 }
 
 
@@ -56,7 +58,21 @@ class CountryRepositoryImpl: CountryRepository {
         }
     }
 
-    
+    override suspend fun searchPosition(query: String): PositionDTO{
+        return try{
+            val response = countryService.searchPosition(query)
+            if(response.isSuccessful){
+                val position = response.body()
+                Log.d("CountryRepository", position.toString())
+                position!!
+            }else{
+                PositionDTO.toInit()
+            }
+        }catch (e: Exception){
+            Log.d("CountryRepository", e.message.toString())
+            PositionDTO.toInit()
+        }
+    }
 
 }
 

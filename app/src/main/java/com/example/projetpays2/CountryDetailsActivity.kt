@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.launch
 
 private const val TAG = "CountryDetailsActivity"
 
@@ -23,6 +25,8 @@ class CountryDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var pos: LatLng
+    private lateinit var countryName: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -33,7 +37,7 @@ class CountryDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
             insets
         }
 
-        val countryName = intent.getStringExtra("countryName")
+        countryName = intent.getStringExtra("countryName")!!
         Log.d(TAG,"Country name : ${countryName}")
         val countryFlag = intent.getStringExtra("countryFlag")
         Log.d(TAG,"Country flag : ${countryFlag}")
@@ -53,16 +57,28 @@ class CountryDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
         countryPopulationTextView.text = "Population: $countryPopulation"
 
         val map = supportFragmentManager.findFragmentById(R.id.country_details_map) as SupportMapFragment
-        pos = LatLng(40.0, 2.0)
+
+        //pos = LatLng(40.0, 2.0)
+
         map.getMapAsync(this)
     }
 
     override fun onMapReady(p0: GoogleMap) {
         mMap = p0
+        val countryRepo = CountryRepositoryImpl()
+        lifecycleScope.launch {
+            try{
+                val position = countryRepo.searchPosition(countryName ?: "")
+                Log.d("CountryDetailsActivity", position.toString())
+                pos = LatLng(position.pos.get(0), position.pos.get(1))
 
-        // Ajouter un marqueur à une position et déplacer la caméra
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(pos))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(pos))
+                // Ajouter un marqueur à une position et déplacer la caméra
+                mMap.addMarker(MarkerOptions().position(pos))
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(pos))
+            }catch (e: Exception){
+                Log.d("CountryDetailsActivity", e.message.toString())
+            }
+        }
+
     }
 }
