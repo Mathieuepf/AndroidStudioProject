@@ -16,6 +16,8 @@ import androidx.room.Room
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+private const val TAG = "CountryListActivity"
+
 class CountryListActivity : AppCompatActivity() {
 
     private lateinit var listCountryRecView: RecyclerView
@@ -33,6 +35,8 @@ class CountryListActivity : AppCompatActivity() {
 
         db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "countries-db").build()
 
+        Log.d(TAG,"Room database built")
+
         listCountryRecView = findViewById(R.id.list_countries_recyclerView)
         listCountryRecView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
@@ -45,7 +49,7 @@ class CountryListActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        println("menu créé")
+        Log.d(TAG,"menu créé")
         menuInflater.inflate(R.menu.list_country, menu)
         return super.onCreateOptionsMenu(menu)
     }
