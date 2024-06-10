@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         val nameLand = findViewById<EditText>(R.id.nom_pays_editText)
 
         researchButton.setOnClickListener {
-            val countryName = nameLand.text
+            val countryName = nameLand.text.toString()
 
             val intent = Intent(this, CountryListActivity::class.java)
             intent.putExtra("userInput", countryName)

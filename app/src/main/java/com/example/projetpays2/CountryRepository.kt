@@ -1,5 +1,7 @@
 package com.example.projetpays2
 
+import android.util.Log
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -14,7 +16,8 @@ interface CountryRepository {
 
 class CountryRepositoryImpl: CountryRepository {
 
-    private val BASE_URL = "https://restcountries.com/v3.1/"
+    //private val BASE_URL = "https://restcountries.com/v3.1/"
+    private val BASE_URL = "https://apicountries.com/"
 
     private val countryService: CountryService
 
@@ -40,7 +43,9 @@ class CountryRepositoryImpl: CountryRepository {
 
     override suspend fun searchCountries(query: String): List<Country> {
         return try {
-            val response = countryService.searchCountries(query).awaitResponse()
+            Log.d("searchCountries", "success !")
+            val response = countryService.searchCountries(query)
+            Log.d("searchCountries", "success ! 2")
             if (response.isSuccessful) {
                 val countriesDTO = response.body() ?: emptyList()
                 countriesDTO.map { it.toModel() }
@@ -48,6 +53,7 @@ class CountryRepositoryImpl: CountryRepository {
                 emptyList()
             }
         } catch (exception: Exception) {
+            Log.d("searchCountries", exception.message.toString())
             emptyList()
         }
     }
@@ -57,6 +63,11 @@ class CountryRepositoryImpl: CountryRepository {
 }
 
 fun CountryDTO.toModel(): Country {
-    val capitalName = capital?.firstOrNull() ?: "Unknown"
-    return Country(name.common, flags.png, capitalName, population)
+    var capitalName = ""
+    if(capital.isNullOrEmpty()){
+        capitalName = "Unknown"
+    }else{
+        capitalName = capital
+    }
+    return Country(name, flags.png, capitalName, population)
 }

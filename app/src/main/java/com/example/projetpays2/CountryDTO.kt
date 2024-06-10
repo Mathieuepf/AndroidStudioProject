@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class CountryDTO(
     @SerializedName("name")
-    val name: Name,
+    val name: String,
     @SerializedName("flags")
     val flags: Flags,
     @SerializedName("capital")
-    val capital: List<String>?,
+    val capital: String?,
     @SerializedName("population")
     val population: Int
 )
