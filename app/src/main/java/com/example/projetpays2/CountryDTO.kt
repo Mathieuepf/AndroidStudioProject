@@ -6,7 +6,11 @@ data class CountryDTO(
     @SerializedName("name")
     val name: Name,
     @SerializedName("flags")
-    val flags: Flags
+    val flags: Flags,
+    @SerializedName("capital")
+    val capital: List<String>?,
+    @SerializedName("population")
+    val population: Int
 )
 
 data class Name(

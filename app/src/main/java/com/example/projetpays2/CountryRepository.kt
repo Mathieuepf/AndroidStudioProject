@@ -48,12 +48,15 @@ class CountryRepositoryImpl: CountryRepository {
                 emptyList()
             }
         } catch (exception: Exception) {
-            val e = exception
             emptyList()
         }
     }
+
+    
+
 }
 
 fun CountryDTO.toModel(): Country {
-    return Country(name.common, flags.png)
+    val capitalName = capital?.firstOrNull() ?: "Unknown"
+    return Country(name.common, flags.png, capitalName, population)
 }

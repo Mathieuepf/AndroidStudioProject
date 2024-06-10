@@ -6,9 +6,11 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "countries")
 data class CountryEntity(
     @PrimaryKey val name: String,
-    val flag: String?
+    val flag: String?,
+    val capital: String,
+    val population: Int
 ) {
-    fun toCountry() = Country(name, flag)
+    fun toCountry() = Country(name, flag, capital, population)
 }
 
-fun Country.toEntity() = CountryEntity(name, flag)
+fun Country.toEntity() = CountryEntity(name, flag, capital, population)

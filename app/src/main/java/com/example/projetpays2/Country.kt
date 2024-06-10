@@ -7,14 +7,18 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Country(
     val name: String,
-    val flag: String?
+    val flag: String?,
+    val capital: String,
+    val population: Int
 ) : Parcelable{
     companion object {
         fun generateCountry(size: Int=10) =
             (1 .. size).map {
                 Country(
                     "Country${it}",
-                    "default"
+                    "default",
+                    "Capitol${it}",
+                    2
                 )
             }
     }
