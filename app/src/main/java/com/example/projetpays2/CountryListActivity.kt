@@ -71,7 +71,7 @@ class CountryListActivity : AppCompatActivity() {
             if(countries.isNotEmpty()){
                 listCountryRecView.adapter = CountryAdapter(countries, this@CountryListActivity, db)
             } else {
-                val localCountries: List<Country> = if (countryName != null) {
+                val localCountries: List<Country> = if (countryName != null && countryName != "") {
                     db.countryDao().getCountry(countryName)?.let { listOf(it.toCountry()) }
                         ?: emptyList()
                 } else {
