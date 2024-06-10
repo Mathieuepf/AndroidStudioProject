@@ -10,6 +10,7 @@
 - **Recherche de pays** : Permet à l'utilisateur de rechercher des pays par leur nom.
 - **Détails du pays** : Affiche les détails d'un pays sélectionné, y compris son drapeau, sa capitale et sa population.
 - **Ajout aux favoris** : Permet à l'utilisateur d'ajouter des pays à sa liste de favoris.
+- **Position du pays** : Affiche la localisation du pays sélectionné sur une carte du monde (Pas finalisée)
 
 ## Structure du Projet
 
@@ -37,3 +38,12 @@ Le projet utilise les dépendances suivantes :
 - **Gson** : Pour la sérialisation/desérialisation des données JSON.
 - **Glide** : Pour le chargement et l'affichage des images (drapeaux des pays).
 - **Kotlin Coroutines** : Pour la gestion asynchrone des tâches.
+
+## Utilisation
+
+Le projet fonctionne comme suit :
+
+- Entrez d'abord le nom d'un pays et appuyez sur le bouton "Rechercher"
+- Vous arrivez sur l'écran listant les pays correpsondants à la recherche : Ici, vous pouvez appuyer sur l'étoile pour sauvegarder un pays localement
+- Si vous entrez une recherche vide ou si vous n'avez pas de connexion, vous retrouverez vos éléments sauvegardés
+- Appuyez sur un pays de la liste et vous tomberez sur la page de détail du pays sélectionné (La carte devrait afficher la position du pays mais cette fonctionnalité n'est pas complète)
