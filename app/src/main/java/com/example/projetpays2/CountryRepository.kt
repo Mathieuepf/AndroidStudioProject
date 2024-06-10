@@ -1,11 +1,9 @@
 package com.example.projetpays2
 
 import android.util.Log
-import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.awaitResponse
 import retrofit2.converter.gson.GsonConverterFactory
 
 interface CountryRepository {

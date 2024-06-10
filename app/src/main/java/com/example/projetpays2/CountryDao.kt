@@ -13,6 +13,9 @@ interface CountryDao {
     @Query("SELECT * FROM countries WHERE name = :name")
     suspend fun getCountry(name: String): CountryEntity?
 
+    @Query("SELECT * FROM countries")
+    suspend fun getCountries(): List<CountryEntity>?
+
     @Query("SELECT * FROM countries WHERE capital = :capital")
     fun getCountryByCapital(capital: String?): CountryEntity?
 }

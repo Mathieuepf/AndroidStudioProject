@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 private const val TAG = "CountryListActivity"
 
@@ -71,9 +70,21 @@ class CountryListActivity : AppCompatActivity() {
             Log.d("CountryListActivity", countries.toString())
             if(countries.isNotEmpty()){
                 listCountryRecView.adapter = CountryAdapter(countries, this@CountryListActivity, db)
-            }else{
-                val countries = Country.generateCountry(10)
-                listCountryRecView.adapter = CountryAdapter(countries, this@CountryListActivity, db)
+            } else {
+                val localCountries: List<Country> = if (countryName != null) {
+                    db.countryDao().getCountry(countryName)?.let { listOf(it.toCountry()) }
+                        ?: emptyList()
+                } else {
+                    db.countryDao().getCountries()?.map { it.toCountry() } ?: emptyList()
+                }
+                if (localCountries.isNotEmpty()) {
+                    listCountryRecView.adapter =
+                        CountryAdapter(localCountries, this@CountryListActivity, db)
+                } else {
+                    val generatedCountries = Country.generateCountry(10)
+                    listCountryRecView.adapter =
+                        CountryAdapter(generatedCountries, this@CountryListActivity, db)
+                }
             }
         }
     }
