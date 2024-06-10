@@ -40,6 +40,8 @@ class CountryAdapter(private val countries: List<Country>, private val context: 
             val intent = Intent(context, CountryDetailsActivity::class.java).apply {
                 putExtra("countryName", country.name)
                 putExtra("countryFlag", country.flag)
+                putExtra("countryCapital", country.capital)
+                putExtra("countryPopulation", country.population)
             }
             context.startActivity(intent)
         }
